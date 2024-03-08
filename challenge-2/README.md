@@ -32,10 +32,7 @@ git clone [FORKED_REPO_URL]
 cd [CLONED_REPO]
 code . 
 ```
-4. Install dependencies using AlgoKit. Run the below command inside of the `challenge-2` folder.
-```bash
-algokit bootstrap all
-```
+
 
 Now you are ready to fix the bug!
 
