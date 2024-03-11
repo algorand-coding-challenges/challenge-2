@@ -63,7 +63,7 @@ Here is a hint for you: https://developer.algorand.org/docs/get-details/algokit/
 
 The Algorand Developer Relations team will review the submission and "approve" the PR by labeling it `Approved`. Once it's approved, we will share the magic link to claim your certificate of completion NFT in the comment of the PR!
 
-> The certificate of completion NFT is a verifiable credential minted on the [GoPlausible platform](https://goplausible.com/) that follows the W3C standard for certificate and OpenBadges standard for badges. 
+> The certificate of completion NFT is a verifiable credential minted on the [GoPlausible platform](https://goplausible.com/) that follows the W3C standard for certificates and OpenBadges standard for badges. 
 
 🎉 Congratulations on completing the challenge Algodev! Now on to the next one 💪
 
@@ -73,7 +73,7 @@ The Algorand Developer Relations team will review the submission and "approve" t
 
 `npm run build` will compile the contract to TEAL and generate an ABI and appspec JSON in [./contracts/artifacts](./contracts/artifacts/) and a algokit TypeScript client in [./contracts/clients](./contracts/clients/).
 
-`npm run compile-contract` or `npm run generate-client` can be used to compile the contract or generate the contract seperately.
+`npm run compile-contract` or `npm run generate-client` can be used to compile the contract or generate the contract separately.
 
 ### Run Tests
 
