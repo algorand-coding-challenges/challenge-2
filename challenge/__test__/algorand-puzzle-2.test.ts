@@ -27,6 +27,7 @@ describe('AlgorandPuzzle2', () => {
 
   test('solveThePuzzle', async () => {
     const result = await appClient.solveThePuzzle({});
+    // eslint-disable-next-line no-console
     console.log(result.return);
     expect(result.return).toBe('You solved the puzzle!');
   });
