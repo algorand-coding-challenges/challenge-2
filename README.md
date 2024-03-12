@@ -59,6 +59,8 @@ Here is a hint for you: https://developer.algorand.org/docs/get-details/algokit/
    2. How did you solve the problem?
    3. Screenshot of your terminal showing the test cases passing. <img width="558" alt="image" src="https://github.com/algorand-devrel/fix-the-bug-private/assets/52557585/3017375c-f85a-42f1-b6e5-262b4560f96d">
 
+<img src="https://raw.githubusercontent.com/ubinix-warun/algorand-coding-challenge-2/main/asset/Screenshot%202567-03-12%20at%2020.42.02.png" />
+
 ## Checkpoint 5: 🏆 Claim your certificate of completion NFT! 🎓
 
 The Algorand Developer Relations team will review the submission and "approve" the PR by labeling it `Approved`. Once it's approved, we will share the magic link to claim your certificate of completion NFT in the comment of the PR!
@@ -82,3 +84,15 @@ The Algorand Developer Relations team will review the submission and "approve" t
 ### Lint
 
 `npm run lint` will lint the contracts and tests with ESLint.
+
+
+## Cheatsheet
+
+```
+brew install algorandfoundation/tap/algokit
+
+algokit bootstrap all
+algokit localnet start
+
+npm run test
+```
