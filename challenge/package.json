@@ -14,12 +14,12 @@
   "dependencies": {
     "@algorandfoundation/algokit-client-generator": "^3.0.0",
     "@algorandfoundation/algokit-utils": "^5.5.0",
-    "@algorandfoundation/tealscript": "^0.86.0",
-    "algosdk": "^2.4.0"
+    "@algorandfoundation/tealscript": "0.74.0",
+    "algosdk": "^2.7.0"
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
-    "@joe-p/algokit-generate-component": "^0.2.0",
+    "@joe-p/algokit-generate-component": "^0.2.1",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^7.32.0 || ^8.2.0",
