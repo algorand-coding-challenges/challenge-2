@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeAll, beforeEach } from '@jest/globals';
-import { algorandFixture } from '@algorandfoundation/algokit-utils/testing';
+import { algorandFixture, algoKitLogCaptureFixture } from '@algorandfoundation/algokit-utils/testing';
 import { AlgorandPuzzle2Client } from '../contracts/clients/AlgorandPuzzle2Client';
 
 const fixture = algorandFixture();
@@ -27,7 +27,10 @@ describe('AlgorandPuzzle2', () => {
 
   test('solveThePuzzle', async () => {
     const result = await appClient.solveThePuzzle({});
+    const logs = algoKitLogCaptureFixture();
     console.log(result.return);
+    const capturedLogs = logs?.testLogger?.capturedLogs;
+    console.log(capturedLogs);
     expect(result.return).toBe('You solved the puzzle!');
   });
 });
