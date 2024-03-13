@@ -24,7 +24,7 @@ import type {
   ApplicationClient,
 } from '@algorandfoundation/algokit-utils/types/app-client'
 import type { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
-import type { SendTransactionResult, TransactionToSign, SendTransactionFrom, SendTransactionParams } from '@algorandfoundation/algokit-utils/types/transaction'
+import type { SendTransactionResult, TransactionToSign, SendTransactionFrom } from '@algorandfoundation/algokit-utils/types/transaction'
 import type { ABIResult, TransactionWithSigner } from 'algosdk'
 import { Algodv2, OnApplicationComplete, Transaction, AtomicTransactionComposer, modelsv2 } from 'algosdk'
 export const APP_SPEC: AppSpec = {
@@ -118,7 +118,7 @@ export type OnCompleteUpdApp =  { onCompleteAction: 'update_application' | OnApp
  */
 export type IntegerState = {
   /**
-   * Gets the state value as a BigInt.
+   * Gets the state value as a BigInt 
    */
   asBigInt(): bigint
   /**
@@ -142,11 +142,6 @@ export type BinaryState = {
 
 export type AppCreateCallTransactionResult = AppCallTransactionResult & Partial<AppCompilationResult> & AppReference
 export type AppUpdateCallTransactionResult = AppCallTransactionResult & Partial<AppCompilationResult>
-
-export type AppClientComposeCallCoreParams = Omit<AppClientCallCoreParams, 'sendParams'> & {
-  sendParams?: Omit<SendTransactionParams, 'skipSending' | 'atc' | 'skipWaiting' | 'maxRoundsToWaitForConfirmation' | 'populateAppCallResources'>
-}
-export type AppClientComposeExecuteParams = Pick<SendTransactionParams, 'skipWaiting' | 'maxRoundsToWaitForConfirmation' | 'populateAppCallResources' | 'suppressLog'>
 
 /**
  * Defines the types of available calls and state of the AlgorandPuzzle2 smart contract.
@@ -370,12 +365,12 @@ export class AlgorandPuzzle2Client {
     let promiseChain:Promise<unknown> = Promise.resolve()
     const resultMappers: Array<undefined | ((x: any) => any)> = []
     return {
-      solveThePuzzle(args: MethodArgs<'solveThePuzzle()string'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
+      solveThePuzzle(args: MethodArgs<'solveThePuzzle()string'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.solveThePuzzle(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      clearState(args?: BareCallArgs & AppClientComposeCallCoreParams & CoreAppCallArgs) {
+      clearState(args?: BareCallArgs & AppClientCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.clearState({...args, sendParams: {...args?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
@@ -396,9 +391,9 @@ export class AlgorandPuzzle2Client {
           returns: result.methodResults?.map((val, i) => resultMappers[i] !== undefined ? resultMappers[i]!(val.returnValue) : val.returnValue)
         }
       },
-      async execute(sendParams?: AppClientComposeExecuteParams) {
+      async execute() {
         await promiseChain
-        const result = await algokit.sendAtomicTransactionComposer({ atc, sendParams }, client.algod)
+        const result = await algokit.sendAtomicTransactionComposer({ atc, sendParams: {} }, client.algod)
         return {
           ...result,
           returns: result.returns?.map((val, i) => resultMappers[i] !== undefined ? resultMappers[i]!(val.returnValue) : val.returnValue)
@@ -415,7 +410,7 @@ export type AlgorandPuzzle2Composer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  solveThePuzzle(args: MethodArgs<'solveThePuzzle()string'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): AlgorandPuzzle2Composer<[...TReturns, MethodReturn<'solveThePuzzle()string'>]>
+  solveThePuzzle(args: MethodArgs<'solveThePuzzle()string'>, params?: AppClientCallCoreParams & CoreAppCallArgs): AlgorandPuzzle2Composer<[...TReturns, MethodReturn<'solveThePuzzle()string'>]>
 
   /**
    * Makes a clear_state call to an existing instance of the AlgorandPuzzle2 smart contract.
@@ -423,7 +418,7 @@ export type AlgorandPuzzle2Composer<TReturns extends [...any[]] = []> = {
    * @param args The arguments for the bare call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  clearState(args?: BareCallArgs & AppClientComposeCallCoreParams & CoreAppCallArgs): AlgorandPuzzle2Composer<[...TReturns, undefined]>
+  clearState(args?: BareCallArgs & AppClientCallCoreParams & CoreAppCallArgs): AlgorandPuzzle2Composer<[...TReturns, undefined]>
 
   /**
    * Adds a transaction to the composer
@@ -443,7 +438,7 @@ export type AlgorandPuzzle2Composer<TReturns extends [...any[]] = []> = {
   /**
    * Executes the transaction group and returns the results
    */
-  execute(sendParams?: AppClientComposeExecuteParams): Promise<AlgorandPuzzle2ComposerResults<TReturns>>
+  execute(): Promise<AlgorandPuzzle2ComposerResults<TReturns>>
 }
 export type SimulateOptions = Omit<ConstructorParameters<typeof modelsv2.SimulateRequest>[0], 'txnGroups'>
 export type AlgorandPuzzle2ComposerSimulateResult<TReturns extends [...any[]]> = {
