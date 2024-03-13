@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@algorandfoundation/tealscript": "^0.87.0"
+  }
+}
