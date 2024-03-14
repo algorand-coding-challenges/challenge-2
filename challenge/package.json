@@ -15,7 +15,8 @@
     "@algorandfoundation/algokit-client-generator": "^3.0.0",
     "@algorandfoundation/algokit-utils": "^5.5.0",
     "@algorandfoundation/tealscript": "^0.86.0",
-    "algosdk": "^2.4.0"
+    "algosdk": "^2.4.0",
+    "bootstrap": "^5.3.3"
   },
   "devDependencies": {
     "@jest/globals": "^29.5.0",
