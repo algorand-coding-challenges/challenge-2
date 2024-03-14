@@ -7,12 +7,14 @@ const fixture = algorandFixture();
 let appClient: AlgorandPuzzle2Client;
 
 describe('AlgorandPuzzle2', () => {
-  beforeEach(fixture.beforeEach);
+   beforeEach(fixture.beforeEach);
 
   beforeAll(async () => {
+    // console.log('Before', fixture.beforeEach);
     await fixture.beforeEach();
+    console.log('After');
     const { algod, testAccount } = fixture.context;
-
+    console.log({ algod, testAccount });
     appClient = new AlgorandPuzzle2Client(
       {
         sender: testAccount,
