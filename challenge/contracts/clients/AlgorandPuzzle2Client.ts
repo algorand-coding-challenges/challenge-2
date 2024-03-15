@@ -6,15 +6,13 @@
  */
 import * as algokit from '@algorandfoundation/algokit-utils'
 import type {
-  ABIAppCallArg,
   AppCallTransactionResult,
   AppCallTransactionResultOfType,
-  AppCompilationResult,
-  AppReference,
-  AppState,
   CoreAppCallArgs,
   RawAppCallArgs,
+  AppState,
   TealTemplateParams,
+  ABIAppCallArg,
 } from '@algorandfoundation/algokit-utils/types/app'
 import type {
   AppClientCallCoreParams,
@@ -24,9 +22,9 @@ import type {
   ApplicationClient,
 } from '@algorandfoundation/algokit-utils/types/app-client'
 import type { AppSpec } from '@algorandfoundation/algokit-utils/types/app-spec'
-import type { SendTransactionResult, TransactionToSign, SendTransactionFrom, SendTransactionParams } from '@algorandfoundation/algokit-utils/types/transaction'
-import type { ABIResult, TransactionWithSigner } from 'algosdk'
-import { Algodv2, OnApplicationComplete, Transaction, AtomicTransactionComposer, modelsv2 } from 'algosdk'
+import type { SendTransactionResult, TransactionToSign, SendTransactionFrom } from '@algorandfoundation/algokit-utils/types/transaction'
+import type { ABIResult, TransactionWithSigner, modelsv2 } from 'algosdk'
+import { Algodv2, OnApplicationComplete, Transaction, AtomicTransactionComposer } from 'algosdk'
 export const APP_SPEC: AppSpec = {
   "hints": {
     "solveThePuzzle()string": {
@@ -68,7 +66,7 @@ export const APP_SPEC: AppSpec = {
     }
   },
   "source": {
-    "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgovLyBUaGlzIFRFQUwgd2FzIGdlbmVyYXRlZCBieSBURUFMU2NyaXB0IHYwLjg2LjAKLy8gaHR0cHM6Ly9naXRodWIuY29tL2FsZ29yYW5kZm91bmRhdGlvbi9URUFMU2NyaXB0CgovLyBUaGlzIGNvbnRyYWN0IGlzIGNvbXBsaWFudCB3aXRoIGFuZC9vciBpbXBsZW1lbnRzIHRoZSBmb2xsb3dpbmcgQVJDczogWyBBUkM0IF0KCi8vIFRoZSBmb2xsb3dpbmcgdGVuIGxpbmVzIG9mIFRFQUwgaGFuZGxlIGluaXRpYWwgcHJvZ3JhbSBmbG93Ci8vIFRoaXMgcGF0dGVybiBpcyB1c2VkIHRvIG1ha2UgaXQgZWFzeSBmb3IgYW55b25lIHRvIHBhcnNlIHRoZSBzdGFydCBvZiB0aGUgcHJvZ3JhbSBhbmQgZGV0ZXJtaW5lIGlmIGEgc3BlY2lmaWMgYWN0aW9uIGlzIGFsbG93ZWQKLy8gSGVyZSwgYWN0aW9uIHJlZmVycyB0byB0aGUgT25Db21wbGV0ZSBpbiBjb21iaW5hdGlvbiB3aXRoIHdoZXRoZXIgdGhlIGFwcCBpcyBiZWluZyBjcmVhdGVkIG9yIGNhbGxlZAovLyBFdmVyeSBwb3NzaWJsZSBhY3Rpb24gZm9yIHRoaXMgY29udHJhY3QgaXMgcmVwcmVzZW50ZWQgaW4gdGhlIHN3aXRjaCBzdGF0ZW1lbnQKLy8gSWYgdGhlIGFjdGlvbiBpcyBub3QgaW1wbGVtZW50ZWQgaW4gdGhlIGNvbnRyYWN0LCBpdHMgcmVzcGVjdGl2ZSBicmFuY2ggd2lsbCBiZSAiKk5PVF9JTVBMRU1FTlRFRCIgd2hpY2gganVzdCBjb250YWlucyAiZXJyIgp0eG4gQXBwbGljYXRpb25JRAohCmludCA2CioKdHhuIE9uQ29tcGxldGlvbgorCnN3aXRjaCAqY2FsbF9Ob09wICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqY3JlYXRlX05vT3AgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVECgoqTk9UX0lNUExFTUVOVEVEOgoJZXJyCgovLyBzb2x2ZVRoZVB1enpsZSgpc3RyaW5nCiphYmlfcm91dGVfc29sdmVUaGVQdXp6bGU6CgkvLyBUaGUgQUJJIHJldHVybiBwcmVmaXgKCWJ5dGUgMHgxNTFmN2M3NQoKCS8vIGV4ZWN1dGUgc29sdmVUaGVQdXp6bGUoKXN0cmluZwoJY2FsbHN1YiBzb2x2ZVRoZVB1enpsZQoJZHVwCglsZW4KCWl0b2IKCWV4dHJhY3QgNiAyCglzd2FwCgljb25jYXQKCWNvbmNhdAoJbG9nCglpbnQgMQoJcmV0dXJuCgovLyBzb2x2ZVRoZVB1enpsZSgpOiBzdHJpbmcKc29sdmVUaGVQdXp6bGU6Cglwcm90byAwIDEKCgkvLyBjb250cmFjdHMvYWxnb3JhbmQtcHV6emxlLTIuYWxnby50czo4CgkvLyByZXR1cm4gJ1lvdSBzb2x2ZWQgdGhlIHB1enpsZSEnOwoJYnl0ZSAweDU5NmY3NTIwNzM2ZjZjNzY2NTY0MjA3NDY4NjUyMDcwNzU3YTdhNmM2NTIxIC8vICJZb3Ugc29sdmVkIHRoZSBwdXp6bGUhIgoJcmV0c3ViCgoqYWJpX3JvdXRlX2NyZWF0ZUFwcGxpY2F0aW9uOgoJaW50IDEKCXJldHVybgoKKmNyZWF0ZV9Ob09wOgoJbWV0aG9kICJjcmVhdGVBcHBsaWNhdGlvbigpdm9pZCIKCXR4bmEgQXBwbGljYXRpb25BcmdzIDAKCW1hdGNoICphYmlfcm91dGVfY3JlYXRlQXBwbGljYXRpb24KCWVycgoKKmNhbGxfTm9PcDoKCW1ldGhvZCAic29sdmVUaGVQdXp6bGUoKXN0cmluZyIKCXR4bmEgQXBwbGljYXRpb25BcmdzIDAKCW1hdGNoICphYmlfcm91dGVfc29sdmVUaGVQdXp6bGUKCWVycg==",
+    "approval": "I3ByYWdtYSB2ZXJzaW9uIDEwCgovLyBUaGlzIFRFQUwgd2FzIGdlbmVyYXRlZCBieSBURUFMU2NyaXB0IHYwLjg2LjAKLy8gaHR0cHM6Ly9naXRodWIuY29tL2FsZ29yYW5kZm91bmRhdGlvbi9URUFMU2NyaXB0CgovLyBUaGlzIGNvbnRyYWN0IGlzIGNvbXBsaWFudCB3aXRoIGFuZC9vciBpbXBsZW1lbnRzIHRoZSBmb2xsb3dpbmcgQVJDczogWyBBUkM0IF0KCi8vIFRoZSBmb2xsb3dpbmcgdGVuIGxpbmVzIG9mIFRFQUwgaGFuZGxlIGluaXRpYWwgcHJvZ3JhbSBmbG93Ci8vIFRoaXMgcGF0dGVybiBpcyB1c2VkIHRvIG1ha2UgaXQgZWFzeSBmb3IgYW55b25lIHRvIHBhcnNlIHRoZSBzdGFydCBvZiB0aGUgcHJvZ3JhbSBhbmQgZGV0ZXJtaW5lIGlmIGEgc3BlY2lmaWMgYWN0aW9uIGlzIGFsbG93ZWQKLy8gSGVyZSwgYWN0aW9uIHJlZmVycyB0byB0aGUgT25Db21wbGV0ZSBpbiBjb21iaW5hdGlvbiB3aXRoIHdoZXRoZXIgdGhlIGFwcCBpcyBiZWluZyBjcmVhdGVkIG9yIGNhbGxlZAovLyBFdmVyeSBwb3NzaWJsZSBhY3Rpb24gZm9yIHRoaXMgY29udHJhY3QgaXMgcmVwcmVzZW50ZWQgaW4gdGhlIHN3aXRjaCBzdGF0ZW1lbnQKLy8gSWYgdGhlIGFjdGlvbiBpcyBub3QgaW1wbGVtZW50ZWQgaW4gdGhlIGNvbnRyYWN0LCBpdHMgcmVzcGVjdGl2ZSBicmFuY2ggd2lsbCBiZSAiKk5PVF9JTVBMRU1FTlRFRCIgd2hpY2gganVzdCBjb250YWlucyAiZXJyIgp0eG4gQXBwbGljYXRpb25JRAohCmludCA2CioKdHhuIE9uQ29tcGxldGlvbgorCnN3aXRjaCAqY2FsbF9Ob09wICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqY3JlYXRlX05vT3AgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVEICpOT1RfSU1QTEVNRU5URUQgKk5PVF9JTVBMRU1FTlRFRCAqTk9UX0lNUExFTUVOVEVECgoqTk9UX0lNUExFTUVOVEVEOgoJZXJyCgovLyBzb2x2ZVRoZVB1enpsZSgpc3RyaW5nCiphYmlfcm91dGVfc29sdmVUaGVQdXp6bGU6CgkvLyBUaGUgQUJJIHJldHVybiBwcmVmaXgKCWJ5dGUgMHgxNTFmN2M3NQoKCS8vIGV4ZWN1dGUgc29sdmVUaGVQdXp6bGUoKXN0cmluZwoJY2FsbHN1YiBzb2x2ZVRoZVB1enpsZQoJZHVwCglsZW4KCWl0b2IKCWV4dHJhY3QgNiAyCglzd2FwCgljb25jYXQKCWNvbmNhdAoJbG9nCglpbnQgMQoJcmV0dXJuCgovLyBzb2x2ZVRoZVB1enpsZSgpOiBzdHJpbmcKc29sdmVUaGVQdXp6bGU6Cglwcm90byAwIDEKCgkvLyBjb250cmFjdHNcYWxnb3JhbmQtcHV6emxlLTIuYWxnby50czo4CgkvLyByZXR1cm4gJ1lvdSBzb2x2ZWQgdGhlIHB1enpsZSEnOwoJYnl0ZSAweDU5NmY3NTIwNzM2ZjZjNzY2NTY0MjA3NDY4NjUyMDcwNzU3YTdhNmM2NTIxIC8vICJZb3Ugc29sdmVkIHRoZSBwdXp6bGUhIgoJcmV0c3ViCgoqYWJpX3JvdXRlX2NyZWF0ZUFwcGxpY2F0aW9uOgoJaW50IDEKCXJldHVybgoKKmNyZWF0ZV9Ob09wOgoJbWV0aG9kICJjcmVhdGVBcHBsaWNhdGlvbigpdm9pZCIKCXR4bmEgQXBwbGljYXRpb25BcmdzIDAKCW1hdGNoICphYmlfcm91dGVfY3JlYXRlQXBwbGljYXRpb24KCWVycgoKKmNhbGxfTm9PcDoKCW1ldGhvZCAic29sdmVUaGVQdXp6bGUoKXN0cmluZyIKCXR4bmEgQXBwbGljYXRpb25BcmdzIDAKCW1hdGNoICphYmlfcm91dGVfc29sdmVUaGVQdXp6bGUKCWVycg==",
     "clear": "I3ByYWdtYSB2ZXJzaW9uIDEw"
   },
   "contract": {
@@ -118,7 +116,7 @@ export type OnCompleteUpdApp =  { onCompleteAction: 'update_application' | OnApp
  */
 export type IntegerState = {
   /**
-   * Gets the state value as a BigInt.
+   * Gets the state value as a BigInt 
    */
   asBigInt(): bigint
   /**
@@ -139,14 +137,6 @@ export type BinaryState = {
    */
   asString(): string
 }
-
-export type AppCreateCallTransactionResult = AppCallTransactionResult & Partial<AppCompilationResult> & AppReference
-export type AppUpdateCallTransactionResult = AppCallTransactionResult & Partial<AppCompilationResult>
-
-export type AppClientComposeCallCoreParams = Omit<AppClientCallCoreParams, 'sendParams'> & {
-  sendParams?: Omit<SendTransactionParams, 'skipSending' | 'atc' | 'skipWaiting' | 'maxRoundsToWaitForConfirmation' | 'populateAppCallResources'>
-}
-export type AppClientComposeExecuteParams = Pick<SendTransactionParams, 'skipWaiting' | 'maxRoundsToWaitForConfirmation' | 'populateAppCallResources' | 'suppressLog'>
 
 /**
  * Defines the types of available calls and state of the AlgorandPuzzle2 smart contract.
@@ -288,14 +278,14 @@ export class AlgorandPuzzle2Client {
    * @param returnValueFormatter An optional delegate to format the return value if required
    * @returns The smart contract response with an updated return value
    */
-  protected mapReturnValue<TReturn, TResult extends AppCallTransactionResult = AppCallTransactionResult>(result: AppCallTransactionResult, returnValueFormatter?: (value: any) => TReturn): AppCallTransactionResultOfType<TReturn> & TResult {
+  protected mapReturnValue<TReturn>(result: AppCallTransactionResult, returnValueFormatter?: (value: any) => TReturn): AppCallTransactionResultOfType<TReturn> {
     if(result.return?.decodeError) {
       throw result.return.decodeError
     }
     const returnValue = result.return?.returnValue !== undefined && returnValueFormatter !== undefined
       ? returnValueFormatter(result.return.returnValue)
       : result.return?.returnValue as TReturn | undefined
-      return { ...result, return: returnValue } as AppCallTransactionResultOfType<TReturn> & TResult
+      return { ...result, return: returnValue }
   }
 
   /**
@@ -337,8 +327,8 @@ export class AlgorandPuzzle2Client {
        * @param params Any additional parameters for the call
        * @returns The create result
        */
-      async createApplication(args: MethodArgs<'createApplication()void'>, params: AppClientCallCoreParams & AppClientCompilationParams & (OnCompleteNoOp) = {}) {
-        return $this.mapReturnValue<MethodReturn<'createApplication()void'>, AppCreateCallTransactionResult>(await $this.appClient.create(AlgorandPuzzle2CallFactory.create.createApplication(args, params)))
+      async createApplication(args: MethodArgs<'createApplication()void'>, params: AppClientCallCoreParams & AppClientCompilationParams & (OnCompleteNoOp) = {}): Promise<AppCallTransactionResultOfType<MethodReturn<'createApplication()void'>>> {
+        return $this.mapReturnValue(await $this.appClient.create(AlgorandPuzzle2CallFactory.create.createApplication(args, params)))
       },
     }
   }
@@ -370,12 +360,12 @@ export class AlgorandPuzzle2Client {
     let promiseChain:Promise<unknown> = Promise.resolve()
     const resultMappers: Array<undefined | ((x: any) => any)> = []
     return {
-      solveThePuzzle(args: MethodArgs<'solveThePuzzle()string'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs) {
+      solveThePuzzle(args: MethodArgs<'solveThePuzzle()string'>, params?: AppClientCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.solveThePuzzle(args, {...params, sendParams: {...params?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
       },
-      clearState(args?: BareCallArgs & AppClientComposeCallCoreParams & CoreAppCallArgs) {
+      clearState(args?: BareCallArgs & AppClientCallCoreParams & CoreAppCallArgs) {
         promiseChain = promiseChain.then(() => client.clearState({...args, sendParams: {...args?.sendParams, skipSending: true, atc}}))
         resultMappers.push(undefined)
         return this
@@ -388,17 +378,14 @@ export class AlgorandPuzzle2Client {
         await promiseChain
         return atc
       },
-      async simulate(options?: SimulateOptions) {
+      async simulate() {
         await promiseChain
-        const result = await atc.simulate(client.algod, new modelsv2.SimulateRequest({ txnGroups: [], ...options }))
-        return {
-          ...result,
-          returns: result.methodResults?.map((val, i) => resultMappers[i] !== undefined ? resultMappers[i]!(val.returnValue) : val.returnValue)
-        }
+        const result = await atc.simulate(client.algod)
+        return result
       },
-      async execute(sendParams?: AppClientComposeExecuteParams) {
+      async execute() {
         await promiseChain
-        const result = await algokit.sendAtomicTransactionComposer({ atc, sendParams }, client.algod)
+        const result = await algokit.sendAtomicTransactionComposer({ atc, sendParams: {} }, client.algod)
         return {
           ...result,
           returns: result.returns?.map((val, i) => resultMappers[i] !== undefined ? resultMappers[i]!(val.returnValue) : val.returnValue)
@@ -415,7 +402,7 @@ export type AlgorandPuzzle2Composer<TReturns extends [...any[]] = []> = {
    * @param params Any additional parameters for the call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  solveThePuzzle(args: MethodArgs<'solveThePuzzle()string'>, params?: AppClientComposeCallCoreParams & CoreAppCallArgs): AlgorandPuzzle2Composer<[...TReturns, MethodReturn<'solveThePuzzle()string'>]>
+  solveThePuzzle(args: MethodArgs<'solveThePuzzle()string'>, params?: AppClientCallCoreParams & CoreAppCallArgs): AlgorandPuzzle2Composer<[...TReturns, MethodReturn<'solveThePuzzle()string'>]>
 
   /**
    * Makes a clear_state call to an existing instance of the AlgorandPuzzle2 smart contract.
@@ -423,7 +410,7 @@ export type AlgorandPuzzle2Composer<TReturns extends [...any[]] = []> = {
    * @param args The arguments for the bare call
    * @returns The typed transaction composer so you can fluently chain multiple calls or call execute to execute all queued up transactions
    */
-  clearState(args?: BareCallArgs & AppClientComposeCallCoreParams & CoreAppCallArgs): AlgorandPuzzle2Composer<[...TReturns, undefined]>
+  clearState(args?: BareCallArgs & AppClientCallCoreParams & CoreAppCallArgs): AlgorandPuzzle2Composer<[...TReturns, undefined]>
 
   /**
    * Adds a transaction to the composer
@@ -439,15 +426,13 @@ export type AlgorandPuzzle2Composer<TReturns extends [...any[]] = []> = {
   /**
    * Simulates the transaction group and returns the result
    */
-  simulate(options?: SimulateOptions): Promise<AlgorandPuzzle2ComposerSimulateResult<TReturns>>
+  simulate(): Promise<AlgorandPuzzle2ComposerSimulateResult>
   /**
    * Executes the transaction group and returns the results
    */
-  execute(sendParams?: AppClientComposeExecuteParams): Promise<AlgorandPuzzle2ComposerResults<TReturns>>
+  execute(): Promise<AlgorandPuzzle2ComposerResults<TReturns>>
 }
-export type SimulateOptions = Omit<ConstructorParameters<typeof modelsv2.SimulateRequest>[0], 'txnGroups'>
-export type AlgorandPuzzle2ComposerSimulateResult<TReturns extends [...any[]]> = {
-  returns: TReturns
+export type AlgorandPuzzle2ComposerSimulateResult = {
   methodResults: ABIResult[]
   simulateResponse: modelsv2.SimulateResponse
 }
