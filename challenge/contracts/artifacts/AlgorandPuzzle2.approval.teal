@@ -43,7 +43,7 @@ switch *call_NoOp *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEMENTED *NOT_IMPLEM
 solveThePuzzle:
 	proto 0 1
 
-	// contracts/algorand-puzzle-2.algo.ts:8
+	// contracts\algorand-puzzle-2.algo.ts:8
 	// return 'You solved the puzzle!';
 	byte 0x596f7520736f6c766564207468652070757a7a6c6521 // "You solved the puzzle!"
 	retsub
