@@ -69,6 +69,10 @@ The Algorand Developer Relations team will review the submission and "approve" t
 
 ## AlgoKit TEALScript Template Information
 
+### Setup dev environment
+
+`npm install` will add all the needed nodejs modules for this project.
+
 ### Build Contract
 
 `npm run build` will compile the contract to TEAL and generate an ABI and appspec JSON in [./contracts/artifacts](./contracts/artifacts/) and a algokit TypeScript client in [./contracts/clients](./contracts/clients/).
